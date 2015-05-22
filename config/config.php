@@ -30,11 +30,13 @@ return [
     | Base Theme
     |--------------------------------------------------------------------------
     |
-    | @todo
+    | Here you have to specify the name of the base theme.
+    | This is where new themes are compied from.
+    | The base theme is protected from users.
     |
     */
 
-    'base_theme' => 'demo',
+    'base_theme' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -57,7 +59,9 @@ return [
     | Demo User Permissions
     |--------------------------------------------------------------------------
     |
-    | @todo
+    | Here you can specify which permissions will be granted to the demo users.
+    | You should only give demo users access to the plugin you will be
+    | demoing, never any admin kind of permissions.
     |
     */
 
@@ -71,22 +75,56 @@ return [
     | Lock Page HTML
     |--------------------------------------------------------------------------
     |
-    | @todo
+    | Here you can specify the HTML to display on the page that shows up when
+    | the site is being reset.
     |
     */
 
-    'lock_page' => '<h1>Please wait.</h1><p>Give us a few moments to reset this demo.</p>',
+    'lock_page' => '<h1>Please wait.</h1><p>Give us a few moments to give this demo a fresh restart :-)</p>',
 
     /*
     |--------------------------------------------------------------------------
     | Custom Provisioners
     |--------------------------------------------------------------------------
     |
-    | @todo
+    | Here you can specify which provisioners to run after every reset.
+    |
+    | @see README.md
     |
     */
 
     'provisioners' => [
-        // '\Author\Plugin\Classes\DemoProvisioner',
+        // '\Author\Plugin\DemoProvisioners\SomeProvisioner',
+        // '\Author\Plugin\DemoProvisioners\OtherProvisioner',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reset Schedule Interval
+    |--------------------------------------------------------------------------
+    |
+    | Here you can enable automatic resetting. Disabled by default.
+    | You can also manually run the demomanager:reset artisan command to run
+    | the reset process.
+    |
+    | This requires you to set up scheduling.
+    | @see http://laravel.com/docs/5.0/artisan#scheduling-artisan-commands
+    |
+    | All the available options are listed below.
+    |
+    */
+
+    'reset_interval' => false,
+    // 'reset_interval' => 'hourly',
+    // 'reset_interval' => 'daily',
+    // 'reset_interval' => 'twiceDaily',
+    // 'reset_interval' => 'weekly',
+    // 'reset_interval' => 'monthly',
+    // 'reset_interval' => 'yearly',
+    // 'reset_interval' => 'everyFiveMinutes',
+    // 'reset_interval' => 'everyTenMinutes',
+    // 'reset_interval' => 'everyThirtyMinutes',
+
+    // 'reset_interval' => '* * * * *',
+    // You can also do custom CRON expressions.
 ];
