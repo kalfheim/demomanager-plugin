@@ -36,7 +36,7 @@ return [
     |
     */
 
-    'base_theme' => false,
+    'base_theme' => null,
 
     /*
     |--------------------------------------------------------------------------
@@ -72,6 +72,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Demo Username Length
+    |--------------------------------------------------------------------------
+    |
+    | Here you can specify the length of the demo usernames.
+    |
+    */
+
+    'username_length' => 10,
+
+    /*
+    |--------------------------------------------------------------------------
     | Lock Page HTML
     |--------------------------------------------------------------------------
     |
@@ -96,6 +107,7 @@ return [
     'provisioners' => [
         // '\Author\Plugin\DemoProvisioners\SomeProvisioner',
         // '\Author\Plugin\DemoProvisioners\OtherProvisioner',
+        // '\Other\Namespace\SomeProvisioner',
     ],
 
     /*
