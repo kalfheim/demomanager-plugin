@@ -10,6 +10,8 @@ If you're selling a paid plugin without providing a live demo, you're surely doi
 
     $ php artisan plugin:install Krisawzm.DemoManager
 
+For security reasons, I **only** recommend setting up a demo site with this plugin in closed enviroments where this site is the only site on the server. You can easily and cheaply achieve this by using a service like [DigitalOcean](https://www.digitalocean.com/) or [Linode](https://www.linode.com/) to create a VPS.
+
 ## Features
 
 ### Closed demo enviroments
