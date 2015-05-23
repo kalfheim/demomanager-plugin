@@ -46,6 +46,23 @@ You can easily change the admin login and password by changing `admin.login` and
 
 > **Note:** The admin login and password should **ALWAYS** be changed!
 
+### `permissions`
+
+By default, demo users are granted no permissions. It's important you specify which permissions they should be granted if the plugin you're demoing require permissions.
+
+    'permissions' => [
+        'rainlab.pages.manage_pages',
+        'rainlab.pages.access_snippets'
+    ],
+
+The above example will grant demo users access to manage pages and access snippets in the [Static Pages](http://octobercms.com/plugin/rainlab-pages) plugin.
+
+### `lock_page`
+
+Before the reset process begins, a file named `.krisawzm-demomanage-lock` is put in the root directory of your project. Whenever this file is present, users will be shown a `"Please wait"` page.
+
+> **Note:** The lockfile is only removed if the reset process runs without **any** errors. If an error occurs, you will have to fix the error, remove the lockfile and re-run the reset command.
+
 ### `provisioners`
 
 Provisioners are used to feed the system additional data every time it has been reset. Provisioners can be thought of as seeders.
