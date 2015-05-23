@@ -2,6 +2,10 @@ Plugin for [OctoberCMS](https://octobercms.com/) which helps you set up an inter
 
 > **Note:** This plugin is only made to be consumed by developers. If you do not know what you are doing, stay clear!
 
+## Installation
+
+    $ php artisan plugin:install Krisawzm.DemoManager
+
 ## Features
 
 ### Closed demo enviroments
