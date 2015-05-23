@@ -97,3 +97,7 @@ I recommend creating a directory named `demoprovisioners` (note: should be lower
 > **Note:** You should add a `.gitignore` file in `demoprovisioners` so it doesn't get pushed into your git repository.
 >
 > Optionally, you could store the provision scripts elsewhere (just remember to change the namespace.)
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT) © 2015 [Kristoffer Alfheim](https://github.com/krisawzm)
