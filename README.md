@@ -73,8 +73,8 @@ Register the `SettingsProvisioner` in the [Configuration](#configuration) by ref
         '\Author\Plugin\DemoProvisioners\SettingsProvisioner'
     ]
 
-I recommend creating a directory named `DemoProvisioners` in your plugin's root directory where you can keep your provision scripts.
+I recommend creating a directory named `demoprovisioners` (note: should be lower case) in your plugin's root directory where you can keep your provision scripts.
 
-> **Note:** You should add a `.gitignore` file in `DemoProvisioners` so it doesn't get pushed into your git repository.
+> **Note:** You should add a `.gitignore` file in `demoprovisioners` so it doesn't get pushed into your git repository.
 >
 > Optionally, you could store the provision scripts elsewhere (just remember to change the namespace.)
