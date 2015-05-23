@@ -27,8 +27,8 @@ class DemoAuth
         $backendUser = BackendAuth::getUser();
 
         if ($backendUser) {
-            if ($backendUser->login == 'admin') {
-                $this->theme = Config::get('krisawzm.demomanager::base_theme', 'demo');
+            if ($backendUser->login == Config::get('krisawzm.demomanager::admin.login', 'admin')) {
+                $this->theme = Config::get('krisawzm.demomanager::base_theme', null);
             }
             else {
                 $this->theme = $backendUser->login;
@@ -36,6 +36,10 @@ class DemoAuth
         }
         else {
             $this->theme = $this->newDemoUser()->login;
+
+            // @todo Remember the username after signing out.
+            //       Could prove useful as some plugins may
+            //       have some different offline views.
         }
     }
 
@@ -47,21 +51,21 @@ class DemoAuth
     protected function newDemoUser()
     {
         $demoManager = DemoManager::instance();
-        $username = Str::quickRandom(10);
+        $login = Str::quickRandom(Config::get('krisawzm.demomanager::username_length', 10));
 
-        if (!$demoManager->copyTheme($username)) {
+        if (!$demoManager->copyTheme($login)) {
             return false;
         }
 
         $user = User::create([
-            'email'                 => $username.'@'.$username.'.tld',
-            'login'                 => $username,
-            'password'              => $username,
-            'password_confirmation' => $username,
-            'first_name'            => ucfirst($username),
+            'email'                 => $login.'@'.$login.'.tld',
+            'login'                 => $login,
+            'password'              => $login,
+            'password_confirmation' => $login,
+            'first_name'            => ucfirst($login),
             'last_name'             => 'Demo',
             'permissions'           => $this->getPermissions(),
-            'is_activated'          => true
+            'is_activated'          => true,
         ]);
 
         BackendAuth::login($user);

@@ -4,7 +4,8 @@ use October\Rain\Support\Traits\Singleton;
 use Artisan;
 use System\Classes\UpdateManager;
 use File;
-use Krisawzm\DemoManager\Classes\DemoManagerException;
+use Config;
+use BackendAuth;
 
 class DemoManager
 {
@@ -25,25 +26,39 @@ class DemoManager
             throw new DemoManagerException('Lock file exists. You may have to remove it.');
         }
 
-        // Lock site
-        $this->locked(true);
+        // Lock site.
+        if (!$this->locked(true)) {
+            throw new DemoManagerException('Error making lockfile.');
+        }
 
-        // Clear cache
+        // Clear cache.
         Artisan::call('cache:clear');
 
-        // Set up an UpdateManager
+        // Set up an UpdateManager.
         $updateManager = UpdateManager::instance();
 
-        // Delete database
+        // Uninstall database.
         $updateManager->uninstall();
 
-        // Update database
+        // Remove old themes.
+        if (!$this->removeOldThemes()) {
+            throw new DemoManagerException('Error removing old themes.');
+        }
+
+        // Update database.
         $updateManager->update();
 
-        // Run any custom provisioners
-        $this->runProvisioners();
+        // Update the admin user.
+        if (!$this->updateAdminUser()) {
+            throw new DemoManagerException('Error updating admin user.');
+        }
 
-        // Unlock site
+        // Run any custom provisioners.
+        if (!$this->runProvisioners()) {
+            throw new DemoManagerException('Error running provisioners.');
+        }
+
+        // Unlock site.
         $this->locked(false);
     }
 
@@ -58,14 +73,34 @@ class DemoManager
         $file = base_path('.krisawzm-demomanager-lock');
 
         if ($set === true) {
-            File::put($file, '');
+            return File::put($file, '') === 0;
         }
         elseif ($set === false) {
-            File::delete($file);
+            return File::delete($file);
         }
         else {
             return File::exists($file);
         }
+    }
+
+    /**
+     * Render the lock page.
+     *
+     * @return strning
+     */
+    public function renderLockPage()
+    {
+        return '
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <title>Resetting...</title>
+        </head>
+        <body>
+            '.Config::get('krisawzm.demomanager::lock_page', 'Resetting...').'
+        </body
+        </html>';
     }
 
     /**
@@ -77,49 +112,85 @@ class DemoManager
     public function copyTheme($destination)
     {
         return File::copyDirectory(
-            themes_path(Config::get('krisawzm.demomanager::base_theme', 'demo')),
+            themes_path(Config::get('krisawzm.demomanager::base_theme', null)),
             themes_path($destination)
         );
     }
 
     /**
-     * Render the lock page.
-     *
-     * @return strning
-     * @todo Custom message
-     */
-    public function renderLockPage()
-    {
-        return '
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="utf-8">
-                <title>Resetting...</title>
-            </head>
-            <body>
-                '.Config::get('krisawzm.demomanager::lock_page', 'Resetting...').'
-            </body
-            </html>';
-    }
-
-    /**
-     * Delete old theme directories.
+     * Update the admin user.
      *
      * @return bool
      */
-    public function removeOldThemes()
+    protected function updateAdminUser()
     {
+        $user = BackendAuth::findUserById(1);
+
+        if (!$user) {
+            return false;
+        }
+
+        $user->login = Config::get('krisawzm.demomanager::admin.login', 'admin');
+
+        $password = Config::get('krisawzm.demomanager::admin.password', 'admin');
+        $user->password = $password;
+        $user->password_confirmation = $password;
+
+        return $user->save();
+    }
+
+    /**
+     * Remove old theme directories.
+     *
+     * @return bool
+     * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
+     */
+    protected function removeOldThemes()
+    {
+        $baseTheme = Config::get('krisawzm.demomanager::base_theme', null);
+
+        if (!$baseTheme) {
+            // Prevents the base theme from accidentally being deleted.
+            throw new DemoManagerException('A base theme is not specified.');
+        }
+
         $themesPath = themes_path();
-        $baseThemePath = themes_path(Config::get('krisawzm.demomanager::base_theme', 'demo'));
+        $baseThemePath = themes_path($baseTheme);
 
         foreach (File::directories($themesPath) as $themePath) {
-            // Do not remove the original theme.
+            // Do not remove the base theme.
             if ($themePath == $baseThemePath) {
                 continue;
             }
 
             if (!File::deleteDirectory($themePath)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Run provisioners specified in the config.
+     *
+     * @return bool
+     * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
+     */
+    public function runProvisioners()
+    {
+        $provisioners = Config::get('krisawzm.demomanager::provisioners', []);
+
+        foreach ($provisioners as $className) {
+            $provisioner = new $className;
+
+            if (!$provisioner instanceof DemoProvisionerInterface) {
+                throw new DemoManagerException(
+                    sprintf('%s must implement \Krisawzm\DemoManager\Classes\DemoProvisionerInterface.', $className)
+                );
+            }
+
+            if (!$provisioner->run()) {
                 return false;
             }
         }
