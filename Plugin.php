@@ -74,14 +74,18 @@ class Plugin extends PluginBase
         }
 
         if (is_string($interval)) {
-            if (method_exists($schedule, $interval)) {
-                $schedule->$interval();
+            $event = $schedule->command('demomanager:reset');
+
+            if (method_exists($event, $interval)) {
+                $event->$interval();
+                return;
             }
             else {
                 $parts = preg_split('/\s/', $interval, null, PREG_SPLIT_NO_EMPTY);
 
                 if (count($parts) == 5) {
-                    $schedule->cron($interval);
+                    $event->cron($interval);
+                    return;
                 }
             }
         }
