@@ -6,7 +6,7 @@ interface DemoProvisionerInterface
      * Run provision tasks.
      * MUST always return a boolean.
      *
-     * @return bool Indicates whether there was an error.
+     * @return bool Indicates success.
      */
     public function run();
 }
