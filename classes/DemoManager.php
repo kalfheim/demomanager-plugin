@@ -108,9 +108,15 @@ class DemoManager
      *
      * @param string $destination
      * @return bool
+     * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
      */
     public function copyTheme($destination)
     {
+        if (!Config::get('krisawzm.demomanager::base_theme', null)) {
+            // Prevents shit from fucking up.
+            throw new DemoManagerException('A base theme is not specified.');
+        }
+
         return File::copyDirectory(
             themes_path(Config::get('krisawzm.demomanager::base_theme', null)),
             themes_path($destination)
