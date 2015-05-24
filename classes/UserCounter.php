@@ -26,7 +26,7 @@ class UserCounter
         if (!Cache::has($this->cacheKey)) {
             Cache::forever(
                 $this->cacheKey,
-                count(File::directories($themesPath)) - 1
+                count(File::directories(themes_path())) - 1
             );
         }
     }
@@ -48,7 +48,7 @@ class UserCounter
      */
     public function inc()
     {
-        return Cache::inc($this->cacheKey);
+        return Cache::forever($this->cacheKey, self::get() + 1);
     }
 
     /**

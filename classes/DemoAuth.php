@@ -4,7 +4,11 @@ use October\Rain\Support\Traits\Singleton;
 use BackendAuth;
 use Backend\Models\User;
 use Illuminate\Support\Str;
+use Cms\Classes\Page;
+use Cms\Classes\Theme;
 use Config;
+use Cache;
+use Event;
 
 class DemoAuth
 {
@@ -21,25 +25,52 @@ class DemoAuth
      * Initialize.
      *
      * @return void
+     * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
      */
     protected function init()
     {
         $backendUser = BackendAuth::getUser();
+        $baseTheme = $this->theme = Config::get('krisawzm.demomanager::base_theme', null);
 
         if ($backendUser) {
             if ($backendUser->login == Config::get('krisawzm.demomanager::admin.login', 'admin')) {
-                $this->theme = Config::get('krisawzm.demomanager::base_theme', null);
+                $this->theme = $baseTheme;
             }
             else {
                 $this->theme = $backendUser->login;
             }
         }
         else {
-            $this->theme = $this->newDemoUser()->login;
+            if (UserCounter::instance()->limit()) {
+                $action = Config::get('krisawzm.demomanager::limit_action', 'reset');
 
-            // @todo Remember the username after signing out.
-            //       Could prove useful as some plugins may
-            //       have some different offline views.
+                if ($action == 'reset') {
+                    DemoManager::instance()->resetEverything();
+                    // @todo queue/async?
+
+                    $this->theme = $this->newDemoUser()->login;
+                }
+                elseif ($action == 'maintenance') {
+                    $theme = Theme::load($baseTheme);
+
+                    Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) use ($theme) {
+                        return Page::loadCached($theme, 'maintenance');
+                    });
+                }
+                elseif ($action == 'nothing') {
+                    $this->theme = $baseTheme;
+                }
+                else {
+                    throw new DemoManagerException('User limit is reached, but an invalid action is defined.');
+                }
+            }
+            else {
+                $this->theme = $this->newDemoUser()->login;
+
+                // @todo Remember the username after signing out.
+                //       Could prove useful as some plugins may
+                //       have some different offline views.
+            }
         }
     }
 
@@ -69,6 +100,8 @@ class DemoAuth
         ]);
 
         BackendAuth::login($user);
+
+        UserCounter::instance()->inc();
 
         return $user;
     }
