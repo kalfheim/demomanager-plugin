@@ -154,9 +154,15 @@ return [
     | Here you can specify the maximum number of users (and theme copies)
     | that can exist at the same time.
     |
-    | When this limit is reached, you can specify one of the following actions:
-    |   - `reset`: (Default) Runs the reset process automatically.
-    |   - `block`: Displays the maintenance mode page for new users.
+    | When the limit is reached, you can specify one of the following actions:
+    |
+    |   - 'reset'        (Default) Runs the reset process automatically.
+    |
+    |   - 'nothing'      The base theme will be used, but the user will not
+    |                    have access to the backend.
+    |
+    |   - 'maintenance'  Display a page with the file name 'maintenance'
+    |                    in the base theme.
     |
     */
 
