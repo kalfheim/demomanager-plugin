@@ -98,6 +98,18 @@ I recommend creating a directory named `demoprovisioners` (note: should be lower
 >
 > Optionally, you could store the provision scripts elsewhere (just remember to change the namespace.)
 
+### `limit`
+
+This feature enabled you to limit the number of users (or copies of the base theme) that are allowed at one time. The default is 500, but you should probably adjust this depending on resources such as disk space.
+
+### `limit_action`
+
+When the limit is reached, you can select how it should be handled:
+
+- `reset`: (Default) Runs the reset process automatically.
+- `nothing`: The base theme will be used, but the user will not have access to the backend.
+- `maintenance`: Display a page with the file name **maintenance** in the base theme.
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT) © 2015 [Kristoffer Alfheim](https://github.com/krisawzm)
