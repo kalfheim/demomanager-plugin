@@ -1,11 +1,12 @@
-<?php namespace Krisawzm\DemoManager;
+<?php
+namespace Krisawzm\DemoManager;
 
-use System\Classes\PluginBase;
-use Krisawzm\DemoManager\Classes\DemoManager;
-use Krisawzm\DemoManager\Classes\DemoAuth;
 use Event;
 use Route;
 use Config;
+use System\Classes\PluginBase;
+use Krisawzm\DemoManager\Classes\DemoManager;
+use Krisawzm\DemoManager\Classes\DemoAuth;
 use October\Rain\Exception\ApplicationException;
 
 /**
@@ -80,13 +81,12 @@ class Plugin extends PluginBase
                 $event->$interval();
                 return;
             }
-            else {
-                $parts = preg_split('/\s/', $interval, null, PREG_SPLIT_NO_EMPTY);
 
-                if (count($parts) == 5) {
-                    $event->cron($interval);
-                    return;
-                }
+            $parts = preg_split('/\s/', $interval, null, PREG_SPLIT_NO_EMPTY);
+
+            if (count($parts) === 5) {
+                $event->cron($interval);
+                return;
             }
         }
 

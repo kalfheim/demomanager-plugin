@@ -1,4 +1,5 @@
-<?php namespace Krisawzm\DemoManager\Classes;
+<?php
+namespace Krisawzm\DemoManager\Classes;
 
 use October\Rain\Exception\ApplicationException;
 
