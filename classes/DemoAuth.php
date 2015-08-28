@@ -1,14 +1,15 @@
-<?php namespace Krisawzm\DemoManager\Classes;
+<?php
+namespace Krisawzm\DemoManager\Classes;
 
-use October\Rain\Support\Traits\Singleton;
-use BackendAuth;
-use Backend\Models\User;
-use Illuminate\Support\Str;
-use Cms\Classes\Page;
-use Cms\Classes\Theme;
-use Config;
 use Cache;
 use Event;
+use Config;
+use BackendAuth;
+use Cms\Classes\Page;
+use Cms\Classes\Theme;
+use Backend\Models\User;
+use Illuminate\Support\Str;
+use October\Rain\Support\Traits\Singleton;
 
 class DemoAuth
 {
@@ -25,6 +26,7 @@ class DemoAuth
      * Initialize.
      *
      * @return void
+     *
      * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
      */
     protected function init()
@@ -33,38 +35,30 @@ class DemoAuth
         $baseTheme = $this->theme = Config::get('krisawzm.demomanager::base_theme', null);
 
         if ($backendUser) {
-            if ($backendUser->login == Config::get('krisawzm.demomanager::admin.login', 'admin')) {
+            if ($backendUser->login === Config::get('krisawzm.demomanager::admin.login', 'admin')) {
                 $this->theme = $baseTheme;
-            }
-            else {
+            } else {
                 $this->theme = $backendUser->login;
             }
-        }
-        else {
+        } else {
             if (UserCounter::instance()->limit()) {
                 $action = Config::get('krisawzm.demomanager::limit_action', 'reset');
 
-                if ($action == 'reset') {
+                if ($action === 'reset') {
                     DemoManager::instance()->resetEverything();
-                    // @todo queue/async?
-
                     $this->theme = $this->newDemoUser()->login;
-                }
-                elseif ($action == 'maintenance') {
+                } elseif ($action === 'maintenance') {
                     $theme = Theme::load($baseTheme);
 
                     Event::listen('cms.page.beforeDisplay', function($controller, $url, $page) use ($theme) {
                         return Page::loadCached($theme, 'maintenance');
                     });
-                }
-                elseif ($action == 'nothing') {
+                } elseif ($action === 'nothing') {
                     $this->theme = $baseTheme;
-                }
-                else {
+                } else {
                     throw new DemoManagerException('User limit is reached, but an invalid action is defined.');
                 }
-            }
-            else {
+            } else {
                 $this->theme = $this->newDemoUser()->login;
 
                 // @todo Remember the username after signing out.

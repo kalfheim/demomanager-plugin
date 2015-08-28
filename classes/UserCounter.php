@@ -1,9 +1,10 @@
-<?php namespace Krisawzm\DemoManager\Classes;
+<?php
+namespace Krisawzm\DemoManager\Classes;
 
-use October\Rain\Support\Traits\Singleton;
+use File;
 use Cache;
 use Config;
-use File;
+use October\Rain\Support\Traits\Singleton;
 
 class UserCounter
 {

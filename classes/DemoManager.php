@@ -1,11 +1,12 @@
-<?php namespace Krisawzm\DemoManager\Classes;
+<?php
+namespace Krisawzm\DemoManager\Classes;
 
-use October\Rain\Support\Traits\Singleton;
-use Artisan;
-use System\Classes\UpdateManager;
 use File;
 use Config;
+use Artisan;
 use BackendAuth;
+use System\Classes\UpdateManager;
+use October\Rain\Support\Traits\Singleton;
 
 class DemoManager
 {
@@ -18,6 +19,7 @@ class DemoManager
      * locked until the lockfile is manually deleted.
      *
      * @return void
+     *
      * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
      */
     public function resetEverything()
@@ -65,7 +67,8 @@ class DemoManager
     /**
      * Check if the lockfile exists or set the lock state.
      *
-     * @param bool|null $set
+     * @param  bool|null $set
+     *
      * @return bool
      */
     public function locked($set = null)
@@ -75,12 +78,12 @@ class DemoManager
         if ($set === true) {
             return File::put($file, '') === 0;
         }
-        elseif ($set === false) {
+
+        if ($set === false) {
             return File::delete($file);
         }
-        else {
-            return File::exists($file);
-        }
+
+        return File::exists($file);
     }
 
     /**
@@ -106,8 +109,10 @@ class DemoManager
     /**
      * Create a copy of the original theme.
      *
-     * @param string $destination
+     * @param  string $destination
+     *
      * @return bool
+     *
      * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
      */
     public function copyTheme($destination)
@@ -151,6 +156,7 @@ class DemoManager
      * Remove old theme directories.
      *
      * @return bool
+     *
      * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
      */
     protected function removeOldThemes()
@@ -167,7 +173,7 @@ class DemoManager
 
         foreach (File::directories($themesPath) as $themePath) {
             // Do not remove the base theme.
-            if ($themePath == $baseThemePath) {
+            if ($themePath === $baseThemePath) {
                 continue;
             }
 
@@ -183,6 +189,7 @@ class DemoManager
      * Run provisioners specified in the config.
      *
      * @return bool
+     *
      * @throws \Krisawzm\DemoManager\Classes\DemoManagerException
      */
     public function runProvisioners()

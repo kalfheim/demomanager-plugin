@@ -4,6 +4,8 @@ Plugin for [OctoberCMS](https://octobercms.com/) which helps you set up an inter
 
 <p align="center"><a href="http://oc-demo.kadesign.no/"><strong>Live Demo</strong></a> &nbsp; &nbsp; <a href="https://octobercms.com/plugin/krisawzm-demomanager"><strong>OctoberCMS Marketplace</strong></a></p>
 
+[![Build Status](https://travis-ci.org/krisawzm/demomanager-plugin.svg?branch=master)](https://travis-ci.org/krisawzm/demomanager-plugin)
+
 **Why a demo?** A live demo makes it really easy for users to evaluate the quality of a plugin without having to install and configure it first. This is great for free plugins, as it may increase the number of downloads and maybe even donations. **But** a live demo shines even brighter when it comes to paid plugins, where installing and testing it beforehand isn't even an option.
 
 If you're selling a paid plugin without providing a live demo, you're surely doing something wrong. Time to change that!

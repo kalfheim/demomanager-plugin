@@ -1,4 +1,5 @@
-<?php namespace Krisawzm\DemoManager\Console;
+<?php
+namespace Krisawzm\DemoManager\Console;
 
 use Illuminate\Console\Command;
 use Krisawzm\DemoManager\Classes\DemoManager;
