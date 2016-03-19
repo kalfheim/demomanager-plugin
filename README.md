@@ -4,7 +4,7 @@ Plugin for [OctoberCMS](https://octobercms.com/) which helps you set up an inter
 
 <p align="center"><a href="http://oc-demo.kadesign.no/"><strong>Live Demo</strong></a> &nbsp; &nbsp; <a href="https://octobercms.com/plugin/krisawzm-demomanager"><strong>OctoberCMS Marketplace</strong></a></p>
 
-[![Build Status](https://travis-ci.org/krisawzm/demomanager-plugin.svg?branch=master)](https://travis-ci.org/krisawzm/demomanager-plugin)
+[![Build Status](https://travis-ci.org/kalfheim/demomanager-plugin.svg?branch=master)](https://travis-ci.org/kalfheim/demomanager-plugin)
 
 **Why a demo?** A live demo makes it really easy for users to evaluate the quality of a plugin without having to install and configure it first. This is great for free plugins, as it may increase the number of downloads and maybe even donations. **But** a live demo shines even brighter when it comes to paid plugins, where installing and testing it beforehand isn't even an option.
 
@@ -118,4 +118,4 @@ When the limit is reached, you can select how it should be handled:
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) © 2015 [Kristoffer Alfheim](https://github.com/krisawzm)
+[MIT](http://opensource.org/licenses/MIT) © 2016 [Kristoffer Alfheim](https://github.com/kalfheim)
